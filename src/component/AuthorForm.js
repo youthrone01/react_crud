@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import http from "./../api/http"
+import http from "./../api/http";
 
 class AuthorForm extends Component {
     
@@ -12,8 +12,17 @@ class AuthorForm extends Component {
             length: false,
           }
         }
+
+        componentWillMount(){
+          if(this.props.name){
+            this.setState(()=>({
+              name: this.props.name
+            }))
+          }
+        }
         onSubmit = (e) => {
           e.preventDefault();
+          //console.log(this.props);
           if(!this.state.name) {
             this.setState(() => ({
               error: true
@@ -27,20 +36,46 @@ class AuthorForm extends Component {
               error: false,
               length: false
             }))
+            
+            if(this.props.authorid && this.props.name){              
+              this.updateAuthor(this.props.authorid,this.state.name);
+            }else{
+              this.createAuthor();
+            }
+          }
+        };
 
-                http.addAuthor(this.state.name)
+        createAuthor = ()=>{
+          http.addAuthor(this.state.name)
                 .then(function (response) {
-                    console.log('response: ', response.data);
-                    this.setState(() => ({
-                        name: ""
-                      }));                    
+                    if(response.data == "Success!"){
+                        this.setState(() => ({
+                            name: ""
+                          }));
+                          this.props.history.push('/'); 
+                          return null 
+                    }                                      
                 }.bind(this))
                 .catch(function (error) {
                     console.log('error: ', error);                    
                 });
-                // this.props.history.push('/');
-          }
-        };
+        }
+
+        updateAuthor = (id, name)=>{
+          http.updateAuthor(id,name)
+                .then(function (response) {
+                    if(response.data == "Success!"){
+                        this.setState(() => ({
+                            name: ""
+                          }));
+                          this.props.history.push('/'); 
+                          return null 
+                    }                                      
+                }.bind(this))
+                .catch(function (error) {
+                    console.log('error: ', error);                    
+                });
+        }
       
         onNameChange = (e) => {
           const name = e.target.value;

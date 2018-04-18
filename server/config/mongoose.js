@@ -3,7 +3,7 @@ var path = require('path');
 
 var fs = require('fs');
 
-mongoose.connect('mongodb://localhost/team_manager_db');
+mongoose.connect('mongodb://localhost/crud');
 
 var models_path = path.join(__dirname, './../models');
 

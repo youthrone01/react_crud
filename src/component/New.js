@@ -13,7 +13,7 @@ class New extends Component {
             <Header />
             <div className="row col-lg-12"><Link to="/">Go Home</Link></div>
             <h3 className="row col-lg-12">Add a new author: </h3>
-            <AuthorForm />
+            <AuthorForm {...this.props}/>
           </div>
         );
       }

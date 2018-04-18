@@ -1,26 +1,25 @@
 // Thumbnails Reducers
 
 const DefaultState = {
-    images: [],
-    modal_pic: {}
+    authors: [],
 }
 
 export default (state = DefaultState, action) => {
     switch (action.type) {
-        case 'GET_IMAGES':
+        case 'GET_AUTHORS':
             return {
-                images: action.images,
-                modal_pic: {}
+                authors: action.authors,
+                
             }
-        case 'CLICK_IMAGE':
+        case 'SORT_AUTHOR':
             return {
-                images: state.images,
-                modal_pic: action.modal_pic
+                authors: action.authors,
+            
             }
         case 'CLOSE_IMAGE':
             return {
-                images: state.images,
-                modal_pic: {}
+                authors: action.authors,
+                
             }
         default:
             return state
