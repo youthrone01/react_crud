@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import http from "./../api/http";
 import { connect} from 'react-redux';
-import { getAuthors,delAuthors,closeImage, sortAuthor } from './../actions/action';
+import { getAuthors,delAuthors, sortAuthorA,sortAuthorD, search_authors } from './../actions/action';
 import { bindActionCreators } from 'redux';
 import { BrowserRouter, Router, Route, Switch, Link, NavLink } from 'react-router-dom';
 
@@ -15,6 +15,7 @@ class Table extends Component {
         http.getALL()
         .then(function(res){
             this.props.actions.getAuthors(res.data);
+            this.all_author = res.data;
             return null;
         }.bind(this))
         .catch(function(err){
@@ -38,17 +39,24 @@ class Table extends Component {
             <tr key={author._id}>
                 <td>{author.name}</td>
                 <td>
-                    <button className="btn btn-info"><Link to={`/edit/${author._id}/${author.name}`}>Edit author</Link></button>
-                    <button onClick={this.deleteAuthor.bind(this, author._id)}>Delete</button>
+                    <Link to={`/edit/${author._id}/${author.name}`}><button className="btn-info">Edit author</button></Link>
+                    <button className="btn-danger" onClick={this.deleteAuthor.bind(this, author._id)}>Delete</button>
                 </td>
             </tr>
           ));
       }
 
-      sortAuthors = ()=>{        
-        this.props.actions.sortAuthor(this.props.authors);
+      sortAuthors_ascending = ()=>{        
+        this.props.actions.sortAuthorA(this.props.authors);
       }
 
+      sortAuthors_descending = ()=>{        
+        this.props.actions.sortAuthorD(this.props.authors);
+      }
+      search_authors = (e)=>{
+        const keyword = e.target.value;        
+        this.props.actions.search_authors(keyword,this.all_author);
+      }
 
     render() {
         const row = this.createRow(this.props);
@@ -56,7 +64,11 @@ class Table extends Component {
             <table className="table table-bordered">
                 <tbody>
                 <tr>
-                    <th>Author <button onClick={this.sortAuthors.bind(this)} >sort</button></th>
+                    <th>Author 
+                        <button onClick={this.sortAuthors_ascending.bind(this)} >sort ↑</button>
+                        <button onClick={this.sortAuthors_descending.bind(this)} >sort ↓</button>
+                        <input onChange={this.search_authors} placeholder="Search by Key words" />
+                    </th>
                     <th>Action available</th>
                 </tr>
                 {row}
@@ -78,8 +90,9 @@ function mapDispatchToProps(dispatch){
         actions : bindActionCreators({
             getAuthors:getAuthors,
             delAuthors:delAuthors,
-            closeImage:closeImage,
-            sortAuthor:sortAuthor
+            sortAuthorD:sortAuthorD,
+            sortAuthorA:sortAuthorA,
+            search_authors:search_authors
           },dispatch)
     }
 }

@@ -11,12 +11,17 @@ export default (state = DefaultState, action) => {
                 authors: action.authors,
                 
             }
-        case 'SORT_AUTHOR':
+        case 'SORT_AUTHOR_ASC':
             return {
                 authors: action.authors,
             
             }
-        case 'CLOSE_IMAGE':
+        case 'SORT_AUTHOR_DES':
+            return {
+                authors: action.authors,
+                
+            }
+        case 'SEARCH_AUTHORS':
             return {
                 authors: action.authors,
                 
